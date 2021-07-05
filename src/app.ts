@@ -12,7 +12,7 @@ class App {
     this.initApp();
   }
   public connectDatabase() {
-    let host: string = "mongodb://172.18.0.2:27017";
+    let host: string = "mongodb://172.20.0.2:27017";
     let database: string = process.env.DATABASE || "seminario";
     let connectionString: string = `${host}/${database}`;
     mongoose.connect(connectionString, {
@@ -20,11 +20,11 @@ class App {
     });
     //Eventos
     mongoose.connection.on("error", (err) => {
-      console.log("Connection Fail");
+      console.log("Connection FAIL");
       console.log(err);
     });
     mongoose.connection.on("open", () => {
-      console.log("database connection success!");
+      console.log("DATABASE CONNECTION SUCCESS!");
     });
     this.mongooseClient = mongoose;
   }
