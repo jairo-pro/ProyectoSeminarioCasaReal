@@ -14,6 +14,7 @@ class RoutesController {
   constructor() { }
   public async login(request: Request, response: Response) {
     var credentials: Icredentials = request.body;
+    
     if (credentials.email == undefined) {
       response
         .status(300)
