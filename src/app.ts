@@ -20,11 +20,11 @@ class App {
     });
     //Eventos
     mongoose.connection.on("error", (err) => {
-      console.log("Connection Fail");
+      console.log("Connection FAIL");
       console.log(err);
     });
     mongoose.connection.on("open", () => {
-      console.log("database connection success!");
+      console.log("DATABASE CONNECTION SUCCESS!");
     });
     this.mongooseClient = mongoose;
   }
