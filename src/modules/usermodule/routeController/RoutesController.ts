@@ -13,6 +13,7 @@ interface Icredentials {
 class RoutesController {
   constructor() { }
   public async login(request: Request, response: Response) {
+
     var credentials: Icredentials = request.body;
     if (credentials.email == undefined) {
       response
@@ -48,14 +49,16 @@ class RoutesController {
   }
   public async createUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
-
     var userData = request.body;
-    if (userData["password"] == null) {
+    /*if (userData["password"] == null) {
       response.status(200).json({ serverResponse: { error: "Paramétros Incorrectos" } })
       return;
-    }
+    }*/
+    var pasT: string = user.passwordGenerate();
+    userData["passwordT"] = pasT;
+    console.log(pasT);
     userData["registerdate"] = new Date();
-    userData["password"] = sha1(userData["password"]);
+    userData["password"] = sha1(userData["passwordT"]);
     let result = await user.addUsers(userData);
     response.status(201).json({ serverResponse: result });
   }

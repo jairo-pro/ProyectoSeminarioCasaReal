@@ -1,5 +1,6 @@
 import UsersModel, { IUser } from "../models/Users";
 import RolesModel, { IRoles } from "../models/Roles";
+//import helpers from "random-helpers";
 class BusinessUser {
     constructor() {
 
@@ -91,5 +92,10 @@ class BusinessUser {
         }
         return null
     }
+    public passwordGenerate() {
+        var hola: string = "retornado contraseña";
+        return hola;
+    }
+
 }
 export default BusinessUser;
