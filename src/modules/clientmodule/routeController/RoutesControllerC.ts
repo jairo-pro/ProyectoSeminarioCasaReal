@@ -6,32 +6,47 @@ import { ISimpleClient, IClient } from '../models/Clients';
 class RoutesControllerC {
     constructor(){}
     
-    public async createClients(req: Request, res: Response){
+    public async createClients(request: Request, response: Response){
         let client: BusinessClient = new BusinessClient();
-        let clientData = req.body;
+        let clientData = request.body;
         clientData["registerdate"] = new Date();
         let result = await client.addClients(clientData);
-        res.status(201).json({ serverResponse: result });
+        response.status(201).json({ serverResponse: result });
     }
-    public async getClients(req: Request, res: Response) {
+    public async getClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
         const result: Array<IClient> = await client.readClients();
-        res.status(200).json({ serverResponse: result });
+        response.status(200).json({ serverResponse: result });
     }
-    public async removeClients(req: Request, res: Response) {
+    public async removeClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
-        let id: string = req.params.id;
+        let id: string = request.params.id;
         let result = await client.deleteClients(id);
-        res.status(200).json({ serverResponse: result });
+        response.status(200).json({ serverResponse: result });
     }
-    public async updateClients(req: Request, res: Response) {
+    public async updateClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
-        let id: string = req.params.id;
-        var params = req.body;
+        let id: string = request.params.id;
+        var params = request.body;
         var result = await client.updateClients(id, params);
-        res.status(200).json({ serverResponse: result });
+        response.status(200).json({ serverResponse: result });
         console.log(id);
         console.log(params);
+    }
+
+    public async getClientsRorP(request: Request, response: Response){
+        var client: BusinessClient = new BusinessClient();
+        let type: string = request.params.type;
+        console.log(typeof(type));
+        if(type == "regular" || type == "potencial" ) {
+            var result: Array<IClient> = await client.readClients(type);
+            response.status(200).json({ serverResponse: result });
+        }
+        else {
+            var r: string = "regular";
+            var p: string = "potencial";
+            response.status(200).json({ serverResponse: `debe ingresar un parametro regular o potencial` });
+        }
     }
 }
 export default RoutesControllerC;

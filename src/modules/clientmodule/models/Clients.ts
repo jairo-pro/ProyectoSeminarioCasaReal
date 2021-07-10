@@ -31,7 +31,7 @@ const userSchema: Schema = new Schema({
     fullname: { type: String, required: true },
     surname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    type: { type: String, default: "potencial" },
+    type: { type: String, required: true/*default: "potencial"*/ },
     telephone: { type: String },
     address: { type: String },
     state: { type: Boolean },
