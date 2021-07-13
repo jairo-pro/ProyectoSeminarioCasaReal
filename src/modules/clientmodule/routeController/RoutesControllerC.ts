@@ -2,7 +2,9 @@ import { Request, Response } from'express';
 import BusinessClient from "../businessController/BusinessClient";
 import BusinessReunion from "../businessController/BusinessReunion";
 import { ISimpleClient, IClient } from '../models/Clients';
-
+import isEmpty from "is-empty";
+import path from "path";
+import sha1 from "sha1";
 
 class RoutesControllerC {
     constructor(){}
@@ -14,11 +16,42 @@ class RoutesControllerC {
         let result = await client.addClients(clientData);
         response.status(201).json({ serverResponse: result });
     }
+    public async createClientsV(request: Request, response: Response){// creacion de un cliente con id de vendedor
+        let client: BusinessClient = new BusinessClient();
+        let clientData = request.body;
+        let idv: string = request.params.idV;
+        if (idv == null) {
+            response.status(300).json({ serverResponse: "es necesrio un id de vendedor" });
+            return;
+        }
+        let result = await client.addClientsV(idv, clientData);
+        if(result == null ){
+            response.status(300).json({ serverResponse: "no existe el vendedor" });
+            return;
+        }
+        response.status(201).json({ serverResponse: result });
+    }
     public async getClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
         const result: Array<IClient> = await client.readClients();
         response.status(200).json({ serverResponse: result });
     }
+    public async getClientsByV(request: Request, response: Response) { //listar clientes por vendedor
+        var client: BusinessClient = new BusinessClient();
+        var idv: string = request.params.idV;
+        
+        if (idv == null) {
+            response.status(300).json({ serverResponse: "es necesrio un id de vendedor" });
+            return;
+        }
+        const result: Array<IClient> = await client.readClientsByVendedor(idv);
+        if(result == null ){
+            response.status(300).json({ serverResponse: "no existe el vendedor" });
+            return;
+        }
+        response.status(200).json({ serverResponse: result });
+    }
+
     public async removeClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
         let id: string = request.params.id;
@@ -47,7 +80,98 @@ class RoutesControllerC {
             response.status(200).json({ serverResponse: `debe ingresar un parametro regular o potencial` });
         }
     }
+    /*public async getClientsRorPByV(request: Request, response: Response) {
+        let client: BusinessClient = new BusinessClient();
+        let type: string = request.params.type;
+        let idv: string = request.params.idV;
+        if(type == "regular" || type == "potencial" ) {
+            var result: Array<IClient> = await client.readClientByVendedor(idv, type);
+            if(result == null) {
+                response.status(200).json({ serverResponse: "error" });
+                return;
+            }
+            response.status(200).json({ serverResponse: result });
+            return;
 
+        }
+        else {
+            response.status(200).json({ serverResponse: `debe ingresar un parametro regular o potencial` });
+            return;
+
+        }
+    }*/
+
+    //-----------------------------PHOTO------------------------------
+
+    public async uploadPhoto(request: Request, response: Response) {
+        var id: string = request.params.id;
+        if (!id) {
+            response.status(300).json({ serverResponse: "el id es necesrio para subir una foto" });
+            return;
+        }
+        var client: BusinessClient = new BusinessClient();
+        var clientoUpdate: IClient = await client.readClientL(id);
+        if (!clientoUpdate) {
+            response.status(300).json({ serverResponse: "El cliente no existe!!" });
+            return;
+        }
+        if (isEmpty(request.files)) {
+            response.status(300).json({ serverResponse: "No existe un archivo adjunto" });
+            return;
+        }
+        var dir = `${__dirname}/../../../../clientfiles`;// para desplazarse al directorio avatarfiles
+        var absolutepath = path.resolve(dir);
+        var files: any = request.files;
+        var key: Array<string> = Object.keys(files);
+
+        var copyDirectory = (totalpath: string, file: any) => {
+            return new Promise((resolve, reject) => {
+                file.mv(totalpath, (err: any, success: any) => {
+                    if (err) {
+                        resolve(false);
+                        return;
+                    }
+                    resolve(true);
+                    return;
+                });
+            });
+        };
+        for (var i = 0; i < key.length; i++){
+            var file: any = files[key[i]];
+            var filehash: string = sha1(new Date().toString()).substr(0, 7);
+            var newname: string = `${filehash}_${file.name}`;
+            var totalpath = `${absolutepath}/${newname}`;
+            await copyDirectory(totalpath, file);
+            clientoUpdate.uriphoto = "/api/getphoto" + id;
+            clientoUpdate.pathphoto = totalpath;
+            var clientResult: IClient = await clientoUpdate.save();
+        }
+        var simpleClient: ISimpleClient = {
+            fullname: clientResult.fullname,
+            uriphoto: clientResult.uriphoto,
+            pathphoto: clientResult.pathphoto,
+        };
+        response.status(300).json({ serverResponse: simpleClient });
+
+    }
+    public async getPhoto(request: Request, response: Response) {
+        var id: string = request.params.id;
+        if (!id) {
+            response.status(300).json({ serverResponse: "Identificador no encontrado" });
+            return;
+        }
+        var client: BusinessClient = new BusinessClient();
+        var clientData: IClient = await client.readClientL(id);
+        if (!clientData) {
+            response.status(300).json({ serverResponse: "Error el cliente no existe" });
+            return;
+        }
+        if (clientData.pathphoto ==  null) {
+            response.status(300).json({ serverResponse: "No existe foto " });
+            return;
+        }
+        response.sendFile(clientData.pathphoto);// sendfile devuelve la imagen q esta en pathavatar
+    }
 
     //----------------------------------REUNIONS------------------------
     public async createReunions(request: Request, response: Response){

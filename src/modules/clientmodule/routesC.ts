@@ -17,13 +17,21 @@ class RoutesC {
     //------------------CLIENTS ROUTES---------------------------
     //app.route(`${this.routeparent}/clients`).post(this.routesControllerC.createClients); login implemetar otra ruta
     app.route(`${this.routeparent}/clients`).post(this.routesControllerC.createClients);
+    app.route(`${this.routeparent}/clients/:idV`).post(this.routesControllerC.createClientsV);//idV id usuario vendedor
 
     app.route(`${this.routeparent}/clients`).get(this.routesControllerC.getClients);
+    app.route(`${this.routeparent}/clients/:idV`).get(this.routesControllerC.getClientsByV);// all clienst captados por vende
+
     app.route(`${this.routeparent}/clients/:id`).delete(this.routesControllerC.removeClients);
     app.route(`${this.routeparent}/clients/:id`).put(this.routesControllerC.updateClients);
 
     app.route(`${this.routeparent}/clients/:type`)
       .get(this.routesControllerC.getClientsRorP); //listar clients regulares o potenciales
+    //app.route(`${this.routeparent}/clients/:type/:idV`)
+      //.get(this.routesControllerC.getClientsRorPByV);//listar clients regulares o potenciales By vendedor
+
+    app.route(`${this.routeparent}/uploadphoto/:id`).post(this.routesControllerC.uploadPhoto);
+    app.route(`${this.routeparent}/getphoto/:id`).get(this.routesControllerC.getPhoto);
 
     //--------------------REUNIONS ROUTES-------------------------------
     app.route(`${this.routeparent}/reunion/:idC/:idV`) //es necesario mandar como parametro id del 
