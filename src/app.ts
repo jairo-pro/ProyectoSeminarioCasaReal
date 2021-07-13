@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import * as bodyParser from "body-parser";
 import UserModules from "./modules/usermodule/init";
+import ClientModules from "./modules/clientmodule/init";
 import mongoose, { Mongoose } from "mongoose";
 import FileUpload from "express-fileupload";
 class App {
@@ -20,11 +21,11 @@ class App {
     });
     //Eventos
     mongoose.connection.on("error", (err) => {
-      console.log("Connection Fail");
+      console.log("Connection FAIL");
       console.log(err);
     });
     mongoose.connection.on("open", () => {
-      console.log("database connection success!");
+      console.log("DATABASE CONNECTION SUCCESS!");
     });
     this.mongooseClient = mongoose;
   }
@@ -36,6 +37,7 @@ class App {
   public initApp() {
     console.log("LOAD MODULES");
     const userModule = new UserModules("/api", this.app);
+    const ClientModule = new ClientModules("/api", this.app);
   }
 }
 export default new App();
