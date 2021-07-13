@@ -7,5 +7,7 @@ class UserModule {
         this.routes = new Routes(root, app);
 
     }
+    
+
 }
 export default UserModule;

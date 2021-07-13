@@ -1,11 +1,14 @@
 import RoutesController from "./routeController/RoutesController";
+//import RoutesControllerC from "./clientmodule/routeController/RoutesControllerC";
 import jsonwebtokenSecurity from "./middleware";
 import { Express } from "express";
 class Routes {
   private routesController: RoutesController;
+  
   private routeparent: string;
   constructor(routeparent: string, app: Express) {
     this.routesController = new RoutesController();
+    
     this.routeparent = routeparent;
     this.configureRoutes(app);
   }
@@ -48,6 +51,9 @@ class Routes {
     app
       .route(`${this.routeparent}/roles/`)
       .get(this.routesController.getRoles);
+    
   }
+ 
+
 }
 export default Routes;
