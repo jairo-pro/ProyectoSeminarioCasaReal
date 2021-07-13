@@ -21,4 +21,5 @@ class BussinessRoles {
         return result;
     }
 }
+
 export default BussinessRoles;
