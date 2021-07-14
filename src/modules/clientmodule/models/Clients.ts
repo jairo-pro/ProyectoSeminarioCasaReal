@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IReunion } from "./Reunion";
+import { IOrder } from "../../ordermodule/models/orders"
 
 export interface ISimpleClient {
     fullname?: string;
@@ -15,7 +16,7 @@ export interface ISimpleClient {
     uriphoto?: string;
     pathphoto?: string;
     idVendedor?: string;
-    //pedidos?: Array<IPedido>;
+    pedidos?: Array<IOrder>;
     reunion?: Array<IReunion>;
 }
 export interface IClient extends Document {
@@ -26,13 +27,13 @@ export interface IClient extends Document {
     email: string;
     type: string; // regular, potencial
     probability: number; //probabilidad
-    state: boolean;
+    state: boolean; // en ruta
     registerdate: Date;
     updateAt?: Date;
     uriphoto?: string;
     pathphoto?: string;
     idVendedor: string;
-    //pedidos?: Array<IPedido>;
+    pedidos?: Array<IOrder>;
     reunion?: Array<IReunion>;
 }
 const clientSchema: Schema = new Schema({

@@ -112,9 +112,35 @@ class BusinessClient {
         let result = await ClientModel.remove({ _id: id });
         return result;
     }
+
+    public async deleteClientsByVendedor(id: string, idv: string) {
+        let client = await ClientModel.findOne({ _id: id });
+        if (client!= null) {
+            if(client.idVendedor == idv){
+                let result = await ClientModel.remove({ _id: id });
+                return result;
+            }
+            return null;
+        }
+        return null;
+        
+    }
     public async updateClients(id: string, client: any) {
         let result = await ClientModel.update({ _id: id }, { $set: client });
         return result;
+    }
+    public async updateClientsByVendedor(idc: string, idv: string, data: any) {
+        let client = await ClientModel.findOne({ _id: idc });
+        if (client != null) {
+            if(client.idVendedor == idv) {
+                data["updateAt"] = new Date();
+                let result = await ClientModel.update({ _id: idc }, { $set: data });
+                return result;
+            }
+            return null;
+        }
+        return null;
+        
     }
 
 }

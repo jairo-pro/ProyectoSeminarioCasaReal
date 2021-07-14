@@ -58,6 +58,23 @@ class RoutesControllerC {
         let result = await client.deleteClients(id);
         response.status(200).json({ serverResponse: result });
     }
+    public async removeClientsByV(request: Request, response: Response) {
+        var client: BusinessClient = new BusinessClient();
+        let id: string = request.params.id;
+        let idv: string = request.params.idv;
+        if(id == null || idv == null) {
+            response.status(300).json({ serverResponse: "ids necesarios" });
+            return;
+        }
+        let result = await client.deleteClientsByVendedor(id, idv);
+        if (result == null) {
+            response.status(300).json({ serverResponse: "no existe el clinte o vendedor" });
+            return;
+        }
+        response.status(200).json({ serverResponse: result });
+    }
+
+
     public async updateClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
         let id: string = request.params.id;
@@ -67,11 +84,27 @@ class RoutesControllerC {
         console.log(id);
         console.log(params);
     }
+    public async updateClientsByV(request: Request, response: Response) {
+        var client: BusinessClient = new BusinessClient();
+        let idc: string = request.params.id;
+        let idv: string = request.params.idv;
+        if(idc == null || idv == null) {
+            response.status(300).json({ serverResponse: "ids necesarios" });
+            return;
+        }
+        let params = request.body;
+        let result = await client.updateClientsByVendedor(idc, idv, params);
+        if (result == null) {
+            response.status(300).json({ serverResponse: "no existe el clinte o vendedor" });
+            return;
+        }
+        response.status(200).json({ serverResponse: result });
+    }
 
     public async getClientsRorP(request: Request, response: Response){
         var client: BusinessClient = new BusinessClient();
         let type: string = request.params.type;
-        console.log(typeof(type));
+        //console.log(typeof(type));
         if(type == "regular" || type == "potencial" ) {
             var result: Array<IClient> = await client.readClients(type);
             response.status(200).json({ serverResponse: result });
