@@ -29,6 +29,10 @@ class BusinessClient {
         let result = await ReunionModel.find();
         return result;
     }
+    public async getOneReunion(idr: string){
+        let result = await ReunionModel.findOne({ _id: idr });
+        return result;
+    }
     public async updateReunion(data: any, idr: string) {
         let reunion = await ReunionModel.findOne({ _id: idr });
         if(reunion != null) {

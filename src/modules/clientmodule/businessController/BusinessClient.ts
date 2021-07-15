@@ -11,32 +11,24 @@ class BusinessClient {
         return result;
     }
 
-    /*public async readClientByVendedor(idv: string, typ: string) {
+    public async readClientByVendedor(idv: string, typ: string) {
         console.log(typ);
         console.log(idv);
-        let listUserR: Array<IClient> = await ClientModel.find({ idVendedor: idv } || { type: typ });
-        return listUserR;
-        let result: Array<IClient> = await ClientModel.find({ idVendedor: idv });
-        console.log(result  + "000" );
-        if(result != null) {
-            for(var i=0; i<result.length; i++) {
-                let cliR: Array<any> = result;
-                if(cliR[i].type != "regular"){
-                    cliR.splice(i, 1);
-                    //return result;
-                    //console.log(cliR[i]  +"1111");
-                    console.log(cliR  +"1111");
-                } else {
-                    cliR.splice(i, 1);
-                    console.log(cliR + "222");
-                }
-                
-            }
+        //let listUserR: Array<IClient> = await ClientModel.find({ idVendedor: idv } || { type: typ });
+        //return listUserR;
+        if(typ == "regular") {
+            let result: Array<IClient> = await ClientModel.find({ idVendedor: idv, type: "regular" });
+            console.log(result);
             return result;
+            
+        } else {
+            let results: Array<IClient> = await ClientModel.find({ idVendedor: idv, type: "potencial" });
+            console.log(results);
+            return results;
         }
-        return null;
         
-    }*/
+        
+    }
 
     public async readClients(): Promise<Array<IClient>>;
     //public async readClients(id: string): Promise<IClient>;
@@ -142,6 +134,20 @@ class BusinessClient {
         return null;
         
     }
+    public async convertRegular(idc: string, idv: string, data: any) {
+        let client = await ClientModel.findOne({ _id: idc });
+        if (client != null) {
+            if(client.idVendedor == idv && client.probability > 50) {
+                data["updateAt"] = new Date();
+                let result = await ClientModel.update({ _id: idc }, { $set: data });
+                return result;
+            }
+            return null;
+        }
+        return null;
+        
+    }
+    
 
 }
 export default BusinessClient;
