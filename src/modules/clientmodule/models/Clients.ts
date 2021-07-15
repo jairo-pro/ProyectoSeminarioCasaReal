@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IReunion } from "./Reunion";
-import { IOrder } from "../../ordermodule/models/orders"
+import { IOrder } from "../../ordermodule/models/orders";
 
 export interface ISimpleClient {
     fullname?: string;
@@ -56,7 +56,7 @@ const clientSchema: Schema = new Schema({
     uriphoto: { type: String },
     pathphoto: { type: String },
     idVendedor: { type: String },
-    pedidos: {type: Array},
+    pedidos: { type: Array },
     reunion: { type: Array },
 });
 

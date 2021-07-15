@@ -17,14 +17,54 @@ class RoutesO {
       .route(`${this.routeparent}/getproducts`)
       .get(this.routesControllerO.getProduct);
     app
-      .route(`${this.routeparent}/updateproducts/:id`)
+      .route(`${this.routeparent}/updateproducts/:id`)   //id del producto
       .put(this.routesControllerO.updateProduct);
     app
-      .route(`${this.routeparent}/removeproducts/:id`)
+      .route(`${this.routeparent}/removeproducts/:id`)   //id del producto
       .delete(this.routesControllerO.removeProduct);
+    app
+      .route(`${this.routeparent}/addphoto/:id`)     //id del producto
+      .post(this.routesControllerO.uploadPhoto);
+    app
+      .route(`${this.routeparent}/getphoto/:id`)   //id del producto
+      .get(this.routesControllerO.getPhoto);
+
+    /*-----------------------------------------ORDER1 ROUTES------------------------------ */
+    app
+      .route(`${this.routeparent}/addorder1/:id`)
+      .post(this.routesControllerO.addOrder1);
+    app
+      .route(`${this.routeparent}/getorder1`)   //id del producto
+      .get(this.routesControllerO.getOrder1);
+    app
+      .route(`${this.routeparent}/removeorder1/:id`)   //id del producto
+      .delete(this.routesControllerO.removeOrder1);
 
     //**---------------------------------------ORDERS ROUTES----------------------------**/
-
+    app
+      .route(`${this.routeparent}/addOrder/:id`) // id del cliente
+      .post(this.routesControllerO.addOrder);
+    app
+      .route(`${this.routeparent}/getorder`)
+      .get(this.routesControllerO.getOrders);
+    app
+      .route(`${this.routeparent}/addOrder1ToOrder/:id`)   //id Orden  
+      .put(this.routesControllerO.addProductToOrder);
+    app
+      .route(`${this.routeparent}/removeorder/:id`)   //id del pedido
+      .delete(this.routesControllerO.removeOrder);
+    app
+      .route(`${this.routeparent}/getordernotDandDe`)
+      .get(this.routesControllerO.getOrderNotDeliandDe);
+    app
+      .route(`${this.routeparent}/registerDeli/:id`)   //id Orden  
+      .put(this.routesControllerO.updateOrderDeli);
+    app
+      .route(`${this.routeparent}/addNotorder/:id`)   // id del cliente
+      .post(this.routesControllerO.createnotOrder);
+    app
+      .route(`${this.routeparent}/addOrderToClient/:id`)   //id del cliente
+      .put(this.routesControllerO.addOrderToClient);
   }
 }
 export default RoutesO;
