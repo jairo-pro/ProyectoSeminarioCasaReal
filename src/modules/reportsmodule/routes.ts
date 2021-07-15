@@ -11,9 +11,7 @@ class Routes {
   }
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
-    app
-      .route(`${this.routeparent}/users`)
-      .get(this.routesController.getUsers);
+    app.route(`${this.routeparent}/report`).get(this.routesController.getCantidadClientsRegular);
     
   }
 }

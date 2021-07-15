@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import BusinessUser from "../businessController/BusinessReport";
+import BusinessClient from "../../clientmodule/businessController/BusinessClient";
+import BusinessUser from "../../usermodule/businessController/BusinessUser";
 import BussinessRoles from "../businessController/BussinessRoles";
 import sha1 from "sha1";
 import jsonwebtoken from "jsonwebtoken";
-import { ISimpleReport, IReport } from "../models/Reports";
+import ClientModel, { IClient } from "../../clientmodule/models/Clients";
+import UserModel, { IUser } from "../../usermodule/models/Users";
 import isEmpty from "is-empty";
 import path from "path";
 interface Icredentials {
@@ -12,12 +14,27 @@ interface Icredentials {
 }
 class RoutesController {
   constructor() { }
-  public async getUsers(request: Request, response: Response) {
-    var user: BusinessUser = new BusinessUser();
-    const result: Array<IReport> = await user.readUsers();
-    response.status(200).json({ serverResponse: result });
+  public async getCantidadClientsRegular(request: Request, response: Response){
+    var user : BusinessUser = new BusinessUser();
+    var client: BusinessClient = new BusinessClient();
+    var clientpoten: Array<IClient> = await client.readClients("potencial");
+    var cantidadclients = [];
+    let idv: Array<IUser> = await user.readUsers() ;
+    for(let i=0;i<idv.length;i++){
+      var contador = 0;
+        for (let j= 0; j<clientpoten.length; j++){
+          if( idv[i].id == clientpoten[j].idVendedor){
+            contador ++;
+          }
+        }
+        cantidadclients.push("Name User is : "+idv[i].username+ " Clientes Registrados : "+contador);
+    }
+    cantidadclients.push("Total De Clientes Registrados : " + clientpoten.length);
+    response.status(200).json({ serverResponse: cantidadclients }); 
   }
-  
+
+
+
   /*
   public async createRol(request: Request, response: Response) {
     let roles: BussinessRoles = new BussinessRoles();
