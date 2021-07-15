@@ -17,16 +17,16 @@ class Routes {
     app.route(`${this.routeparent}/login`).post(this.routesController.login);
     app
       .route(`${this.routeparent}/users`)
-      .post(this.routesController.createUsers);
+      .post(/*jsonwebtokenSecurity, */this.routesController.createUsers);
     app
       .route(`${this.routeparent}/users`)
-      .get(this.routesController.getUsers);
+      .get(/*jsonwebtokenSecurity, */this.routesController.getUsers);
     app
       .route(`${this.routeparent}/users/:id`)
-      .put(this.routesController.updateUsers);
+      .put(/*jsonwebtokenSecurity, */this.routesController.updateUsers);
     app
       .route(`${this.routeparent}/users/:id`)
-      .delete(this.routesController.removeUsers);
+      .delete(/*jsonwebtokenSecurity, */this.routesController.removeUsers);
     app
       .route(`${this.routeparent}/uploadportrait/:id`)
       .post(this.routesController.uploadPortrait);

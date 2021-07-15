@@ -1,4 +1,4 @@
-import UsersModel, { IUser } from "../models/Users";
+import UsersModel, { IReport } from "../models/Reports";
 import RolesModel, { IRoles } from "../models/Roles";
 class BusinessUser {
     constructor() {
@@ -8,21 +8,21 @@ class BusinessUser {
      * OverLoad
      * 
      * **/
-    public async readUsers(): Promise<Array<IUser>>;
-    public async readUsers(id: string): Promise<IUser>;
-    public async readUsers(query: any, skip: number, limit: number): Promise<Array<IUser>>;
+    public async readUsers(): Promise<Array<IReport>>;
+    public async readUsers(id: string): Promise<IReport>;
+    public async readUsers(query: any, skip: number, limit: number): Promise<Array<IReport>>;
 
-    public async readUsers(params1?: string | any, params2?: number, params3?: number): Promise<Array<IUser> | IUser> {
+    public async readUsers(params1?: string | any, params2?: number, params3?: number): Promise<Array<IReport> | IReport> {
         if (params1 && typeof params1 == "string") {
-            var result: IUser = await UsersModel.findOne({ _id: params1 });
+            var result: IReport = await UsersModel.findOne({ _id: params1 });
             return result;
         } else if (params1) {
             let skip = params2 ? params2 : 0;
             let limit = params3 ? params3 : 1;
-            let listUser: Array<IUser> = await UsersModel.find(params1).skip(skip).limit(limit);
+            let listUser: Array<IReport> = await UsersModel.find(params1).skip(skip).limit(limit);
             return listUser;
         } else {
-            let listUser: Array<IUser> = await UsersModel.find();
+            let listUser: Array<IReport> = await UsersModel.find();
             return listUser;
 
         }
@@ -30,7 +30,7 @@ class BusinessUser {
     //addUsers
     //CRUD
 
-    public async addUsers(user: IUser) {
+    public async addUsers(user: IReport) {
         try {
             let userDb = new UsersModel(user);
             let result = await userDb.save();
@@ -91,17 +91,5 @@ class BusinessUser {
         }
         return null
     }
-    /*
-    PASSWORD GENERADO
-    https://es.stackoverflow.com/questions/281758/generar-cadenas-caracteres-aleatorios-typescript
-    */
-    public GeneratePassword(n: number): string {
-        let result = '';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-        for (let i = 0; i < n; i++){
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-      }
 }
 export default BusinessUser;

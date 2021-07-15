@@ -1,9 +1,43 @@
 import ClientModel, { IClient } from "../models/Clients";
 
+import UserModel, { IUser } from "../../usermodule/models/Users";
+
 class BusinessClient {
     constructor(){
 
     }
+    public async readClientL(id: string){
+        var result: IClient =  await ClientModel.findOne({ _id: id });
+        return result;
+    }
+
+    /*public async readClientByVendedor(idv: string, typ: string) {
+        console.log(typ);
+        console.log(idv);
+        let listUserR: Array<IClient> = await ClientModel.find({ idVendedor: idv } || { type: typ });
+        return listUserR;
+        let result: Array<IClient> = await ClientModel.find({ idVendedor: idv });
+        console.log(result  + "000" );
+        if(result != null) {
+            for(var i=0; i<result.length; i++) {
+                let cliR: Array<any> = result;
+                if(cliR[i].type != "regular"){
+                    cliR.splice(i, 1);
+                    //return result;
+                    //console.log(cliR[i]  +"1111");
+                    console.log(cliR  +"1111");
+                } else {
+                    cliR.splice(i, 1);
+                    console.log(cliR + "222");
+                }
+                
+            }
+            return result;
+        }
+        return null;
+        
+    }*/
+
     public async readClients(): Promise<Array<IClient>>;
     //public async readClients(id: string): Promise<IClient>;
     public async readClients(types: string): Promise<Array<IClient>>;
@@ -39,6 +73,13 @@ class BusinessClient {
 
         }
     }
+    public async readClientsByVendedor(idv: string) {
+        let listClient: Array<IClient> = await ClientModel.find({ idVendedor: idv });
+        if(listClient != null) {
+            return listClient;
+        }
+        return null;
+    }
 
     public async addClients(client: IClient) {
         try {
@@ -49,14 +90,57 @@ class BusinessClient {
             return err;
         }
     }
+
+    public async addClientsV(idv: string, client: IClient) {
+        try {
+            let vendedor = await UserModel.findOne({ _id: idv });
+            if(vendedor != null) {
+                client["registerdate"] = new Date();
+                client["idVendedor"] = idv;
+                let clientDb = new ClientModel(client);
+                let result = await clientDb.save();
+                return result;
+            }
+            return null;
+
+        } catch (err) {
+            return err;
+        }
+    }
     
     public async deleteClients(id: string) {
         let result = await ClientModel.remove({ _id: id });
         return result;
     }
+
+    public async deleteClientsByVendedor(id: string, idv: string) {
+        let client = await ClientModel.findOne({ _id: id });
+        if (client!= null) {
+            if(client.idVendedor == idv){
+                let result = await ClientModel.remove({ _id: id });
+                return result;
+            }
+            return null;
+        }
+        return null;
+        
+    }
     public async updateClients(id: string, client: any) {
         let result = await ClientModel.update({ _id: id }, { $set: client });
         return result;
+    }
+    public async updateClientsByVendedor(idc: string, idv: string, data: any) {
+        let client = await ClientModel.findOne({ _id: idc });
+        if (client != null) {
+            if(client.idVendedor == idv) {
+                data["updateAt"] = new Date();
+                let result = await ClientModel.update({ _id: idc }, { $set: data });
+                return result;
+            }
+            return null;
+        }
+        return null;
+        
     }
 
 }

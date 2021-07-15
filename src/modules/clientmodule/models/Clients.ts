@@ -27,7 +27,7 @@ export interface IClient extends Document {
     email: string;
     type: string; // regular, potencial
     probability: number; //probabilidad
-    state: boolean;
+    state: boolean; // en ruta
     registerdate: Date;
     updateAt?: Date;
     uriphoto?: string;
