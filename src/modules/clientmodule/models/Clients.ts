@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IReunion } from "./Reunion";
+import { IOrder } from "../../ordermodule/models/orders";
 
 export interface ISimpleClient {
     fullname?: string;
@@ -15,7 +16,7 @@ export interface ISimpleClient {
     uriphoto?: string;
     pathphoto?: string;
     idVendedor?: string;
-    //pedidos?: Array<IPedido>;
+    pedidos?: Array<IOrder>;
     reunion?: Array<IReunion>;
 }
 export interface IClient extends Document {
@@ -32,7 +33,7 @@ export interface IClient extends Document {
     uriphoto?: string;
     pathphoto?: string;
     idVendedor: string;
-    //pedidos?: Array<IPedido>;
+    pedidos?: Array<IOrder>;
     reunion?: Array<IReunion>;
 }
 const clientSchema: Schema = new Schema({
@@ -42,14 +43,14 @@ const clientSchema: Schema = new Schema({
     type: { type: String, required: true/*default: "potencial"*/ },
     telephone: { type: String },
     address: { type: String },
-    probability: {type: Number},
+    probability: { type: Number },
     state: { type: Boolean },
     registerdate: { type: Date, required: true },//default: Date.now
     updateAt: { type: Date },
     uriphoto: { type: String },
     pathphoto: { type: String },
     idVendedor: { type: String },
-    pedidos: {type: Array},
+    pedidos: { type: Array },
     reunion: { type: Array },
 });
 
