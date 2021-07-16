@@ -12,7 +12,6 @@ class Routes {
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
     app.route(`${this.routeparent}/report`).get(this.routesController.getCantidadClientsRegular);
-    
   }
 }
 export default Routes;

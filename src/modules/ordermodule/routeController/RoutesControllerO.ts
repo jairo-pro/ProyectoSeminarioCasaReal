@@ -260,7 +260,7 @@ class RoutesControllerO {
     }
 
     public async generateReceipt(request: Request, response: Response) {
-
+        
     }
 
 }

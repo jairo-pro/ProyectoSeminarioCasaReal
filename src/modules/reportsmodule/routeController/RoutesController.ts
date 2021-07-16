@@ -30,10 +30,27 @@ class RoutesController {
         cantidadclients.push("Name User is : "+idv[i].username+ " Clientes Registrados : "+contador);
     }
     cantidadclients.push("Total De Clientes Registrados : " + clientpoten.length);
-    response.status(200).json({ serverResponse: cantidadclients }); 
+    response.status(200).json({ serverResponse: cantidadclients });
   }
 
-
+  public async getPedidsRegister(request: Request, response: Response){
+    var user : BusinessUser = new BusinessUser();
+    var client: BusinessClient = new BusinessClient();
+    var clientpoten: Array<IClient> = await client.readClients("potencial");
+    var cantidadclients = [];
+    let idv: Array<IUser> = await user.readUsers() ;  
+    for(let i=0;i<idv.length;i++){
+      var contador = 0;
+        for (let j= 0; j<clientpoten.length; j++){
+          if( idv[i].id == clientpoten[j].idVendedor){
+            contador ++;
+          }
+        }
+        cantidadclients.push("Name User is : "+idv[i].username+ " Clientes Registrados : "+contador);
+    }
+    cantidadclients.push("Total De Clientes Registrados : " + clientpoten.length);
+    response.status(200).json({ serverResponse: cantidadclients }); 
+  }
 
   /*
   public async createRol(request: Request, response: Response) {

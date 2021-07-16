@@ -7,6 +7,7 @@ import ReportModules from "./modules/reportsmodule/init";
 import mongoose, { Mongoose } from "mongoose";
 import FileUpload from "express-fileupload";
 import ClientModule from "./modules/clientmodule/init";
+import ReportModules from "./modules/reportsmodule/init";
 class App {
   public app: Express = express();
   public mongooseClient: Mongoose;
@@ -42,8 +43,12 @@ class App {
     const userModule = new UserModules("/api", this.app);
     const productModule = new OrderModules("/api", this.app);
     const clientsModules = new ClientsModules("/api", this.app);
+<<<<<<< HEAD
     const ReportsModules = new ReportModules("/api", this.app);
 
+=======
+    const reportModules = new ReportModules("/api", this.app);
+>>>>>>> a12bba792cbd194e4cd3908980c8f09a66ca9c01
   }
 }
 export default new App();

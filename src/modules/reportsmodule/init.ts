@@ -3,7 +3,7 @@ import Routes from "./routes";
 class ReportModules {
     private routes: Routes;
     constructor(root: string, app: Express) {
-        console.log("INIT REPORT MODULES");
+        console.log("INCIAR ROL");
         this.routes = new Routes(root, app);
 
     }
