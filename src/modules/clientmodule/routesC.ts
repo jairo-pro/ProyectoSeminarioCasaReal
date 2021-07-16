@@ -16,13 +16,14 @@ class RoutesC {
 
     //------------------CLIENTS ROUTES---------------------------
     //app.route(`${this.routeparent}/clients`).post(this.routesControllerC.createClients); login implemetar otra ruta
-    app.route(`${this.routeparent}/clients`).post(this.routesControllerC.createClients);
+    app.route(`${this.routeparent}/admin/clients/:ida/:idv`)// admin crea cliente con id de vendedor(idv)
+      .post(this.routesControllerC.createClients);
     app.route(`${this.routeparent}/clients/:idV`).post(this.routesControllerC.createClientsV);//idV id usuario vendedor
 
-    app.route(`${this.routeparent}/clients`).get(this.routesControllerC.getClients);
+    app.route(`${this.routeparent}/admin/clients/:ida`).get(this.routesControllerC.getClients);
     app.route(`${this.routeparent}/clients/:idV`).get(this.routesControllerC.getClientsByV);// all clienst captados por vende
 
-    app.route(`${this.routeparent}/clients/:id`).delete(this.routesControllerC.removeClients);
+    app.route(`${this.routeparent}/admin/clients/:id/:ida`).delete(this.routesControllerC.removeClients);
     app.route(`${this.routeparent}/clients/:id/:idv`).delete(this.routesControllerC.removeClientsByV);
 
     app.route(`${this.routeparent}/clients/:id`).put(this.routesControllerC.updateClients);

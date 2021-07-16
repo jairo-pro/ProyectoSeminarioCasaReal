@@ -72,12 +72,31 @@ class BusinessClient {
         }
         return null;
     }
+    public async readClientsAdmin(ida: string) {
+        let admin = await UserModel.findOne({ _id: ida, type: "administrador" });
+            if(admin != null){
+                let listUser: Array<IClient> = await ClientModel.find();
+                return listUser;
+            }
+            return null;
+    }
 
-    public async addClients(client: IClient) {
+    public async addClients(ida: string, idv: string, client: IClient) {
         try {
-            let clientDb = new ClientModel(client);
-            let result = await clientDb.save();
-            return result;
+            let admin = await UserModel.findOne({ _id: ida, type: "administrador" });
+            if(admin != null){
+                let vendedor = await UserModel.findOne({ _id: idv });
+                if(vendedor != null) {
+                    client["registerdate"] = new Date();
+                    client["idVendedor"] = idv;
+                    let clientDb = new ClientModel(client);
+                    let result = await clientDb.save();
+                    return result;
+                }
+                return null;
+            }
+            return null;
+           
         } catch (err) {
             return err;
         }
@@ -100,9 +119,18 @@ class BusinessClient {
         }
     }
     
-    public async deleteClients(id: string) {
-        let result = await ClientModel.remove({ _id: id });
-        return result;
+    public async deleteClients(id: string, ida: string) {
+        let admin = await UserModel.findOne({ _id: ida, type: "administrador" });
+        if(admin != null){
+            let clien = await ClientModel.findOne({ _id: id });
+            if(clien != null) {
+                let result = await ClientModel.remove({ _id: id });
+                return result;
+            }
+            return null;
+        }
+        
+        return null;
     }
 
     public async deleteClientsByVendedor(id: string, idv: string) {
