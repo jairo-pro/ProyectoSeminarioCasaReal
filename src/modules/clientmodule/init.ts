@@ -3,7 +3,7 @@ import RoutesC from "./routesC";
 class ClientModule {
     private routes: RoutesC;
     constructor(root: string, app: Express) {
-        console.log("INIT CLIENT MODULE");
+        console.log("INIT CLIENT MODULEE");
         this.routes = new RoutesC(root, app);
 
     }

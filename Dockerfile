@@ -7,5 +7,5 @@ RUN npm install ts-node -g
 COPY . .
 RUN npm install
 EXPOSE 8000
-RUN npm run dev
+RUN npm run buld
 CMD ["nodemon", "dist/server.js"]

@@ -11,8 +11,9 @@ class BusinessClient {
         let client = await ClientModel.findOne({ _id: idc });
         //console.log(client);
         if (client != null){
-            let user = await UserModel.findOne({ _id: idv });
-            if(user != null) {
+            if ( client.type == "potencial"){
+                let user = await UserModel.findOne({ _id: idv });
+                if(user != null) {
                 
                 data["idVendedor"] = idv;
                 data["idClient"] = idc;
@@ -21,9 +22,12 @@ class BusinessClient {
                 await client.save();
                 let result = await dataDb.save();
                 return result;
+                }
+                return null;
             }
-        return null;
+            return null
         }
+        return null;
     }
     public async getListReunion(){
         let result = await ReunionModel.find();

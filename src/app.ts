@@ -3,6 +3,7 @@ import * as bodyParser from "body-parser";
 import UserModules from "./modules/usermodule/init";
 import OrderModules from "./modules/ordermodule/initO";
 import ClientsModules from "./modules/clientmodule/init";
+import ReportModules from "./modules/reportsmodule/init";
 import mongoose, { Mongoose } from "mongoose";
 import FileUpload from "express-fileupload";
 import ClientModule from "./modules/clientmodule/init";
@@ -15,7 +16,7 @@ class App {
     this.initApp();
   }
   public connectDatabase() {
-    let host: string = "mongodb://172.21.0.2:27017";
+    let host: string = "mongodb://172.22.0.2:27017";
     let database: string = process.env.DATABASE || "seminario";
     let connectionString: string = `${host}/${database}`;
     mongoose.connect(connectionString, {
@@ -41,6 +42,8 @@ class App {
     const userModule = new UserModules("/api", this.app);
     const productModule = new OrderModules("/api", this.app);
     const clientsModules = new ClientsModules("/api", this.app);
+    const ReportsModules = new ReportModules("/api", this.app);
+
   }
 }
 export default new App();

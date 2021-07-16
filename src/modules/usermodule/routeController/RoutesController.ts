@@ -7,7 +7,8 @@ import { ISimpleUser, IUser } from "../models/Users";
 import isEmpty from "is-empty";
 import path from "path";
 interface Icredentials {
-  email: string;
+  email?: string;
+  //username?: string;
   password: string;
 }
 class RoutesController {

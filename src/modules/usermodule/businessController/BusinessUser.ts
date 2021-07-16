@@ -1,5 +1,6 @@
 import UsersModel, { IUser } from "../models/Users";
 import RolesModel, { IRoles } from "../models/Roles";
+
 class BusinessUser {
     constructor() {
 

@@ -241,7 +241,7 @@ class RoutesControllerC {
         }
         let result = await reunion.addReunion(reunionData, idc, idv );
         if (result == null) {
-            response.status(300).json({ serverResponse: "elcliente o vendedor no existen" });
+            response.status(300).json({ serverResponse: "client regular not o vendedor no existen" });
             return;
         }
         
