@@ -2,6 +2,8 @@ import OrderModel, { IOrder } from "../models/orders";
 import OrderModel1, { IOrder1 } from "../models/order";
 import ProductsModel, { IProduct } from "../models/products";
 import ClientModule, { IClient } from "../../clientmodule/models/Clients";
+import OrderModule from "../initO";
+
 
 class BusinessOrder {
     constructor() {
@@ -27,6 +29,11 @@ class BusinessOrder {
             let listOrder: Array<IOrder> = await OrderModel.find();
             return listOrder;
         }
+    }
+
+    public async readorder(id: string) {
+        var result: IOrder = await OrderModel.findOne({ _id: id })
+        return result;
     }
 
     public async addorder(idC: string, order: IOrder) {
@@ -91,8 +98,39 @@ class BusinessOrder {
     }
 
     public async deleteOrder(id: string) {
+        var order = await OrderModel.findById(id);
+        if (order.stateOrder == "no entregado") {
+            var client = await ClientModule.findById(order.id_Cliente);
+            var pediC: Array<IOrder> = client.pedidos;
+            console.log(pediC + "1111");
+            for (var i = 0; i < pediC.length; i++) {
+                if (pediC[i]._id == id) {
+                    pediC.splice(i, 1);
+                }
+            }
+            var detalle: Array<IOrder1> = order.productsO;
+            console.log(detalle + "2222");
+            for (var i = 0; i < detalle.length; i++) {
+                var idP = detalle[i].id_Producto;
+                var product = await ProductsModel.findById(idP);
+                if (product._id == idP) {
+                    var canP = detalle[i].quantityP + detalle[i].stockD;
+                    await ProductsModel.update({ _id: idP }, { $set: { stockP: canP } });
+                    detalle.splice(i, 1);
+                    await OrderModel1.findByIdAndDelete(detalle[i]._id);
+                    console.log("ok");
+                }
+            }
+            let result = await OrderModel.remove({ _id: id });
+            return result;
+        }
+        return null;
+    }
+    public async deletePed(id: string) {
         let result = await OrderModel.remove({ _id: id });
         return result;
     }
+
+
 }
 export default BusinessOrder;

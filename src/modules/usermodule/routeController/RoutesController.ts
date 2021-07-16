@@ -15,11 +15,11 @@ class RoutesController {
   public async login(request: Request, response: Response) {
 
     var credentials: Icredentials = request.body;
-    
+
     if (credentials.email == undefined) {
       response
         .status(300)
-        .json({ serverResponse: "Es necesario el parámetro de email" });
+        .json({ serverResponse: "Es necesario el parámetro de email o username" });
       return;
     }
     if (credentials.password == undefined) {
