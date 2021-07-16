@@ -10,10 +10,18 @@ class RoutesControllerC {
     constructor(){}
     
     public async createClients(request: Request, response: Response){
+        
         let client: BusinessClient = new BusinessClient();
+        let ida: string = request.params.ida
+        let idv: string = request.params.idv;
         let clientData = request.body;
-        clientData["registerdate"] = new Date();
-        let result = await client.addClients(clientData);
+        //clientData["registerdate"] = new Date();
+        
+        let result = await client.addClients(ida, idv, clientData);
+        if(result == null ){
+            response.status(300).json({ serverResponse: "no existe el vendedor o admin incirrecto" });
+            return;
+        }
         response.status(201).json({ serverResponse: result });
     }
     public async createClientsV(request: Request, response: Response){// creacion de un cliente con id de vendedor
@@ -33,7 +41,12 @@ class RoutesControllerC {
     }
     public async getClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
-        const result: Array<IClient> = await client.readClients();
+        let ida: string = request.params.ida;
+        const result: Array<IClient> = await client.readClientsAdmin(ida);
+        if(result == null ){
+            response.status(300).json({ serverResponse: "no existe el admin" });
+            return;
+        }
         response.status(200).json({ serverResponse: result });
     }
     public async getClientsByV(request: Request, response: Response) { //listar clientes por vendedor
@@ -55,7 +68,12 @@ class RoutesControllerC {
     public async removeClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
         let id: string = request.params.id;
-        let result = await client.deleteClients(id);
+        let ida: string = request.params.ida;
+        let result = await client.deleteClients(id, ida);
+        if(result == null ){
+            response.status(300).json({ serverResponse: "no existe el client o admin" });
+            return;
+        } 
         response.status(200).json({ serverResponse: result });
     }
     public async removeClientsByV(request: Request, response: Response) {
@@ -101,6 +119,28 @@ class RoutesControllerC {
         response.status(200).json({ serverResponse: result });
     }
 
+    public async changeClient(request: Request, response: Response){
+        let client: BusinessClient = new BusinessClient();
+        let idc: string = request.params.idc;
+        let idv: string = request.params.idv;
+        if(idc == null || idv == null) {
+            response.status(300).json({ serverResponse: "ids necesarios" });
+            return;
+        }
+        let typ = request.body;
+        let tipo = typ["type"];
+        if(tipo != "potencial"){
+            response.status(300).json({ serverResponse: "el cliente ya es de tipo regular" });
+            return;
+        }
+        let result = await client.convertRegular(idc, idv, typ);
+        if (result == null) {
+            response.status(300).json({ serverResponse: "sin probabilidad de pase" });
+            return;
+        }
+        response.status(200).json({ serverResponse: result });
+    }
+
     public async getClientsRorP(request: Request, response: Response){
         var client: BusinessClient = new BusinessClient();
         let type: string = request.params.type;
@@ -113,7 +153,7 @@ class RoutesControllerC {
             response.status(200).json({ serverResponse: `debe ingresar un parametro regular o potencial` });
         }
     }
-    /*public async getClientsRorPByV(request: Request, response: Response) {
+    public async getClientsRorPByV(request: Request, response: Response) {
         let client: BusinessClient = new BusinessClient();
         let type: string = request.params.type;
         let idv: string = request.params.idV;
@@ -132,7 +172,8 @@ class RoutesControllerC {
             return;
 
         }
-    }*/
+        //response.status(200).json({ serverResponse: `debe ingresar un parametro regular o potencial` });
+    }
 
     //-----------------------------PHOTO------------------------------
 
@@ -218,7 +259,7 @@ class RoutesControllerC {
         }
         let result = await reunion.addReunion(reunionData, idc, idv );
         if (result == null) {
-            response.status(300).json({ serverResponse: "elcliente o vendedor no existen" });
+            response.status(300).json({ serverResponse: "client regular not o vendedor no existen" });
             return;
         }
         
@@ -233,6 +274,12 @@ class RoutesControllerC {
     public async getReunion(request: Request, response: Response) {
         let reunion: BusinessReunion = new BusinessReunion();
         let result = await reunion.getListReunion();
+        response.status(200).json({ serverResponse: result })
+    }
+    public async getOneReunion(request: Request, response: Response) {
+        let reunion: BusinessReunion = new BusinessReunion();
+        let idr: string = request.params.idr;
+        let result = await reunion.getOneReunion(idr);
         response.status(200).json({ serverResponse: result })
     }
     public async editedReunion(request: Request, response: Response) {

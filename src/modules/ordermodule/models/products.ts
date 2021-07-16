@@ -15,7 +15,6 @@ export interface IProduct extends Document {
     priceP: number;
     uriphoto: string;
     pathphoto: string;
-
 }
 
 const productSchema: Schema = new Schema({

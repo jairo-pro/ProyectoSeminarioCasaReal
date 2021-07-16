@@ -6,7 +6,9 @@ export interface ISimpleClient {
     fullname?: string;
     surname?: string;
     telephone?: string;
-    address?: string;  //domicilio, direccion
+    zona?: string;  //domicilio, direccion
+    calle?: string;
+    numero?: number;
     email?: string;
     type?: string; // regular, potencial
     probability?: number;
@@ -23,7 +25,9 @@ export interface IClient extends Document {
     fullname: string;
     surname: string;
     telephone: string;
-    address: string;
+    zona: string;
+    calle: string;
+    numero: number; //numero de domicilio o negocio
     email: string;
     type: string; // regular, potencial
     probability: number; //probabilidad
@@ -42,8 +46,10 @@ const clientSchema: Schema = new Schema({
     email: { type: String, required: true, unique: true },
     type: { type: String, required: true/*default: "potencial"*/ },
     telephone: { type: String },
-    address: { type: String },
-    probability: { type: Number },
+    zona: { type: String },
+    calle: { type: String },
+    numero: { type: Number },
+    probability: {type: Number},
     state: { type: Boolean },
     registerdate: { type: Date, required: true },//default: Date.now
     updateAt: { type: Date },

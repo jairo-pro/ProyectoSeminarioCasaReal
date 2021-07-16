@@ -5,6 +5,7 @@ export interface ISimpleUser {
   username?: string;
   email?: string;
   registerdate?: Date;
+  type?: string; 
   passwordT?: string;
   password?: string;
   roles?: Array<IRoles>;
@@ -15,6 +16,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   registerdate: Date;
+  type: string; 
   passwordT: string,
   password: string;
   roles: Array<IRoles>;
@@ -25,6 +27,7 @@ const userSchema: Schema = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   registerdate: { type: Date, required: true },
+  type: {type: String},//usuario o administra
   passwordT: { type: String },
   password: { type: String },
   roles: { type: Array },
