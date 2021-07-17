@@ -26,7 +26,7 @@ class RoutesC {
     app.route(`${this.routeparent}/admin/clients/:id/:ida`).delete(this.routesControllerC.removeClients);
     app.route(`${this.routeparent}/clients/:id/:idv`).delete(this.routesControllerC.removeClientsByV);
 
-    app.route(`${this.routeparent}/clients/:id`).put(this.routesControllerC.updateClients);
+    app.route(`${this.routeparent}/admin/clients/:id/:ida`).put(this.routesControllerC.updateClients);
     app.route(`${this.routeparent}/clients/:id/:idv`).put(this.routesControllerC.updateClientsByV);
     app.route(`${this.routeparent}/clients/potencial/:idc/:idv`)
       .put(this.routesControllerC.changeClient);// convert client potencial->regular
