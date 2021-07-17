@@ -10,21 +10,19 @@ interface Icredentials {
   email?: string;
   username?: string;
   password: string;
-  
+
 }
 class RoutesController {
   constructor() { }
   public async login(request: Request, response: Response) {
 
     var credentials: Icredentials = request.body;
-    
+
     if (credentials.email == undefined) {
-      if(credentials.username == undefined){
-        response
-          .status(400)
-          .json({ serverResponse: "Es necesario el parámetro de email o username" });
-        return;
-      }
+      response
+        .status(300)
+        .json({ serverResponse: "Es necesario el parámetro de email o username" });
+      return;
     }
     if (credentials.password == undefined) {
       response
@@ -37,16 +35,16 @@ class RoutesController {
     let result: Array<IUser> = await user.readUsers(credentials, 0, 1);
     if (result.length == 1) {
       var loginUser: IUser = result[0];
-      if(loginUser.email != null){
+      if (loginUser.email != null) {
         var token: string = jsonwebtoken.sign(
-          { id: loginUser._id, email: loginUser.email},
-          "secret", {expiresIn: "24h"} // expires in 24 hours
+          { id: loginUser._id, email: loginUser.email },
+          "secret", { expiresIn: "24h" } // expires in 24 hours
         );
       }
-      else{
+      else {
         var token: string = jsonwebtoken.sign(
-          { id: loginUser._id, username: loginUser.username},
-          "secret" , {expiresIn: "24h"} // expires in 24 hours
+          { id: loginUser._id, username: loginUser.username },
+          "secret", { expiresIn: "24h" } // expires in 24 hours
         );
       }
       response.status(200).json({

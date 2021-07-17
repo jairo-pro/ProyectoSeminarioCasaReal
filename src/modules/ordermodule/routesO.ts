@@ -60,11 +60,14 @@ class RoutesO {
       .route(`${this.routeparent}/registerDeli/:id`)   //id Orden  
       .put(this.routesControllerO.updateOrderDeli);
     app
-      .route(`${this.routeparent}/addNotorder/:id`)   // id del cliente
-      .post(this.routesControllerO.createnotOrder);
-    app
       .route(`${this.routeparent}/addOrderToClient/:id`)   //id del cliente
       .put(this.routesControllerO.addOrderToClient);
+    app
+      .route(`${this.routeparent}/generateRec/:id`)
+      .get(this.routesControllerO.generateReceipt);
+    app
+      .route(`${this.routeparent}/getpdf/:id`)
+      .get(this.routesControllerO.getpdf);
   }
 }
 export default RoutesO;
