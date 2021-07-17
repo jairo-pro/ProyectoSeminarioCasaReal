@@ -10,7 +10,9 @@ import Order1Model, { IOrder1 } from "../models/order";
 import isEmpty from "is-empty";
 import sha1 from "sha1";
 import pdf from "html-pdf";
-
+import PDF from "pdfkit";
+import fs from "fs";
+import { size } from "pdfkit/js/page";
 class RoutesControllerO {
     constructor() { }
 
@@ -261,28 +263,35 @@ class RoutesControllerO {
         var absolutepath = path.resolve(dir);
         var filehash: string = sha1(new Date().toString()).substr(0, 7);
         var name: string = orderUpdate.client;
-        var newname: string = `${filehash}_${name}"`;
+        var newname: string = `${filehash}_${name}.pdf`;
         var totalpath = `${absolutepath}/${newname}`;
         orderUpdate.uripdf = "/api/getpdf/" + id;
         orderUpdate.pathpdf = totalpath;
-        var contenido = `
-        <h1>Esto es un test de html-pdf</h1>
-        <p>Estoy generando PDF a partir de este código HTML sencillo</p>
-        `;
-        pdf.create(contenido).toFile(totalpath, function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(res);
-            }
-        });
+        var product: Array<IOrder1> = orderUpdate.productsO;
+        var doc = new PDF();
+        doc.pipe(fs.createWriteStream(totalpath));
+        doc.fontSize(20);
+        doc.text("RECIBO");
+        doc.fontSize(15);
+        doc.text("Fecha de registro: " + orderUpdate.registerdateO.getDate() + " - " + orderUpdate.registerdateO.getMonth() + " - " + orderUpdate.registerdateO.getFullYear())
+        doc.text("Nombre: " + orderUpdate.client)
+        doc.fontSize(16);
+        doc.text("Detalle del pedido", { underline: true })
+        for (var i = 0; i < product.length; i++) {
+            doc.text(product[i].nameP + "  " + product[i].quantityP + "  x  " + product[i].pricePO + "  =  " + product[i].priceTotalO);
+        }
+        doc.text(".........................................................................................................");
+        doc.text("Total:  Bs." + orderUpdate.priceTotalOrder)
+        doc.end();
+        console.log("archivo generado");
         var orderResult: IOrder = await orderUpdate.save();
         var simpleOrder: ISimpleOrder = {
             client: orderResult.client,
             uripdf: orderResult.uripdf,
             pathpdf: orderResult.pathpdf,
         };
-        response.status(201).json({ message: "imagen asignada a un producto", serverResponse: simpleOrder });
+
+        response.status(201).json({ message: "recibo generado", serverResponse: simpleOrder });
     }
 
     public async getpdf(request: Request, response: Response) {

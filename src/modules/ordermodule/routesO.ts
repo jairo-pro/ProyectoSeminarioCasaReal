@@ -64,7 +64,7 @@ class RoutesO {
       .put(this.routesControllerO.addOrderToClient);
     app
       .route(`${this.routeparent}/generateRec/:id`)
-      .get(this.routesControllerO.generateReceipt);
+      .post(this.routesControllerO.generateReceipt);
     app
       .route(`${this.routeparent}/getpdf/:id`)
       .get(this.routesControllerO.getpdf);
