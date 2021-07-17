@@ -66,8 +66,9 @@ class BusinessClient {
         }
     }
     public async readClientsByVendedor(idv: string) {
+        let userVendedor =  await UserModel.findOne({ _id: idv, type: "vendedor" });
         let listClient: Array<IClient> = await ClientModel.find({ idVendedor: idv });
-        if(listClient != null) {
+        if(listClient != null && userVendedor != null) {
             return listClient;
         }
         return null;
@@ -104,7 +105,7 @@ class BusinessClient {
 
     public async addClientsV(idv: string, client: IClient) {
         try {
-            let vendedor = await UserModel.findOne({ _id: idv });
+            let vendedor = await UserModel.findOne({ _id: idv, type: "vendedor" });
             if(vendedor != null) {
                 client["registerdate"] = new Date();
                 client["idVendedor"] = idv;
@@ -134,8 +135,9 @@ class BusinessClient {
     }
 
     public async deleteClientsByVendedor(id: string, idv: string) {
+        let userVendedor = await UserModel.findOne({ _id: idv, type: "vendedor" });
         let client = await ClientModel.findOne({ _id: id });
-        if (client!= null) {
+        if (client!= null && userVendedor != null ) {
             if(client.idVendedor == idv){
                 let result = await ClientModel.remove({ _id: id });
                 return result;
@@ -145,13 +147,20 @@ class BusinessClient {
         return null;
         
     }
-    public async updateClients(id: string, client: any) {
-        let result = await ClientModel.update({ _id: id }, { $set: client });
-        return result;
+    public async updateClients(id: string, ida: string, cliente: any) {
+        let admin = await UserModel.findOne({ _id: ida, type: "administrador" });
+        let client = await ClientModel.findOne({ _id: id });
+        if (client!= null && admin != null ) {
+            let result = await ClientModel.update({ _id: id }, { $set: cliente });
+            return result;
+        }
+        return null;
+        
     }
     public async updateClientsByVendedor(idc: string, idv: string, data: any) {
         let client = await ClientModel.findOne({ _id: idc });
-        if (client != null) {
+        let userVendedor = await UserModel.findOne({ _id: idv, type: "vendedor" })
+        if (client != null && userVendedor != null) {
             if(client.idVendedor == idv) {
                 data["updateAt"] = new Date();
                 let result = await ClientModel.update({ _id: idc }, { $set: data });

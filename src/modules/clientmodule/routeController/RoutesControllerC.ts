@@ -96,8 +96,13 @@ class RoutesControllerC {
     public async updateClients(request: Request, response: Response) {
         var client: BusinessClient = new BusinessClient();
         let id: string = request.params.id;
+        let ida: string = request.params.ida;
         var params = request.body;
-        var result = await client.updateClients(id, params);
+        var result = await client.updateClients(id, ida, params);
+        if (result == null) {
+            response.status(300).json({ serverResponse: "no existe el admin o client" });
+            return;
+        }
         response.status(200).json({ serverResponse: result });
         console.log(id);
         console.log(params);
